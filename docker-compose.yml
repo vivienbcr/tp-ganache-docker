@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+    myethapp:
+        build:
+            context: .
+            dockerfile: Dockerfile
+            args:
+                # [Choice] Node.js version: 14, 12, 10
+                VARIANT: 14
+                # On Linux, you may need to update USER_UID and USER_GID below if not your local UID is not 1000.
+                USER_UID: 1000
+                USER_GID: 1000
+        volumes: 
+            - $PWD:/app
+
+        network_mode: service:flextesa
+    ganacheru:
+        hostname: ganacheru
+        container_name: ganacheru
+        
+        image: trufflesuite/ganache-cli:latest
+        command: "ganache-cli --db /chaindata"
+        volumes:
+            - $PWD/data/ganache:/chaindata
