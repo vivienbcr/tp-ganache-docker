@@ -12,14 +12,18 @@ services:
                 USER_UID: 1000
                 USER_GID: 1000
         volumes: 
-            - $PWD:/app
+            - $PWD/src:/app
+        
+        command: bash -c "cd /app && npm install && npx truffle compile && npx truffle migrate && npx truffle test && sleep infinity"
 
-        network_mode: service:flextesa
+        network_mode: service:ganacheru
     ganacheru:
         hostname: ganacheru
         container_name: ganacheru
         
         image: trufflesuite/ganache-cli:latest
-        command: "ganache-cli --db /chaindata"
+        command: "ganache-cli --db /chaindata --accounts 10 --debug"
+        ports:
+            - "8545:8545"
         volumes:
             - $PWD/data/ganache:/chaindata
